@@ -1,0 +1,168 @@
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --text: #1c2421;
+  --muted: #6b7672;
+  --line: #e2e7e5;
+  --accent: #1f6f5c;
+  --accent-soft: #e3f1ec;
+  --expense: #c9483b;
+  --income: #2a7bbf;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121615;
+    --surface: #1c2220;
+    --text: #e8eeec;
+    --muted: #94a19c;
+    --line: #2c3532;
+    --accent: #4fb89c;
+    --accent-soft: #1f3530;
+    --expense: #ef7a6d;
+    --income: #6db3ef;
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+button, input, select { font: inherit; color: inherit; }
+
+main { max-width: 520px; margin: 0 auto; padding: 0 16px; }
+.view { display: none; }
+.view.active { display: block; }
+
+.topbar { padding: calc(14px + env(safe-area-inset-top)) 0 10px; }
+.topbar h1 { margin: 0; font-size: 22px; }
+.sub { font-size: 14px; color: var(--muted); font-weight: 600; margin: 22px 0 8px; }
+
+/* 支出/収入, 週/月 切り替え */
+.type-toggle, .period-toggle {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  background: var(--line); padding: 4px; border-radius: 12px;
+}
+.type-btn, .period-btn {
+  border: 0; background: transparent; padding: 10px; border-radius: 9px;
+  font-weight: 600; color: var(--muted);
+}
+.type-btn.active, .period-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.type-btn.active[data-type="expense"] { color: var(--expense); }
+.type-btn.active[data-type="income"] { color: var(--income); }
+
+/* 金額 */
+.amount-wrap {
+  display: flex; align-items: baseline; gap: 6px;
+  background: var(--surface); border-radius: var(--radius);
+  padding: 14px 18px; margin: 14px 0 12px;
+  border: 2px solid transparent;
+}
+.amount-wrap:focus-within { border-color: var(--accent); }
+.yen { font-size: 24px; color: var(--muted); }
+#amount {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font-size: 36px; font-weight: 700; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* カテゴリ */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--line); background: var(--surface);
+  padding: 8px 14px; border-radius: 999px; font-size: 15px;
+}
+.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.field { display: block; margin-top: 12px; }
+.field span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.field input, .select {
+  width: 100%; padding: 12px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface);
+}
+
+.save-btn {
+  width: 100%; margin-top: 16px; padding: 15px;
+  border: 0; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-weight: 700; font-size: 17px;
+}
+.save-btn:active { transform: scale(.99); opacity: .9; }
+
+.toast {
+  text-align: center; color: var(--accent); font-weight: 600;
+  height: 0; overflow: hidden; transition: height .2s;
+}
+.toast.show { height: 28px; padding-top: 8px; }
+
+/* 記録リスト */
+.entry-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: var(--radius); }
+.entry-list:empty::after { content: "まだ記録がありません"; display: block; padding: 16px; color: var(--muted); text-align: center; font-size: 14px; }
+.entry {
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 1px solid var(--line);
+}
+.entry:last-child { border-bottom: 0; }
+.entry .meta { min-width: 0; }
+.entry .cat { font-weight: 600; }
+.entry .info { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.entry .amt { font-weight: 700; font-variant-numeric: tabular-nums; }
+.entry .amt.expense { color: var(--expense); }
+.entry .amt.income { color: var(--income); }
+.del-btn { border: 0; background: transparent; color: var(--muted); font-size: 18px; padding: 4px 6px; }
+
+/* 集計 */
+.period-nav { display: flex; align-items: center; justify-content: space-between; margin: 14px 0; }
+.period-nav button {
+  width: 44px; height: 44px; border-radius: 50%; border: 0;
+  background: var(--surface); font-size: 24px;
+}
+#period-label { font-weight: 700; font-size: 17px; }
+
+.totals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.total-card { background: var(--surface); border-radius: var(--radius); padding: 14px; }
+.total-card span { display: block; font-size: 12px; color: var(--muted); }
+.total-card strong { display: block; font-size: 22px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.total-card.income strong { color: var(--income); }
+.total-card.expense strong { color: var(--expense); }
+.total-card.diff { grid-column: 1 / -1; }
+.total-card.diff strong { font-size: 28px; }
+.total-card.diff strong.neg { color: var(--expense); }
+.total-card.diff strong.pos { color: var(--income); }
+
+.breakdown { list-style: none; margin: 0; padding: 14px; background: var(--surface); border-radius: var(--radius); }
+.breakdown:empty::after { content: "支出はありません"; color: var(--muted); font-size: 14px; }
+.bd-row { margin-bottom: 12px; }
+.bd-row:last-child { margin-bottom: 0; }
+.bd-head { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; }
+.bd-head b { font-variant-numeric: tabular-nums; }
+.bd-bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bd-bar i { display: block; height: 100%; background: var(--expense); border-radius: 4px; }
+
+/* 設定 */
+.card { background: var(--surface); border-radius: var(--radius); padding: 4px 14px 14px; margin-bottom: 14px; }
+.note { font-size: 13px; color: var(--muted); margin: 0 0 10px; line-height: 1.6; }
+.ghost-btn {
+  display: block; width: 100%; text-align: center; margin-top: 8px; padding: 12px;
+  border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 10px; font-weight: 600;
+}
+.file-btn { cursor: pointer; }
+
+/* タブバー */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab {
+  border: 0; background: transparent; padding: 8px 0 10px;
+  font-size: 11px; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.tab .ic { font-size: 20px; line-height: 1.2; }
+.tab.active { color: var(--accent); font-weight: 700; }
