@@ -156,10 +156,14 @@ main { max-width: 520px; margin: 0 auto; padding: 0 16px; }
 .sub-note { margin-top: 8px; }
 
 .sheet {
+  position: fixed; inset: 0; margin: auto; height: fit-content; max-height: calc(100% - 32px); overflow: auto; z-index: 100;
   width: min(480px, calc(100% - 32px)); border: 0; border-radius: var(--radius);
   background: var(--bg); color: var(--text); padding: 6px 16px 16px;
 }
-.sheet::backdrop { background: rgba(0,0,0,.4); }
+.sheet:not([open]) { display: none; }
+/* 背景の暗幕（<dialog> 非対応ブラウザでも効くよう box-shadow で） */
+.sheet[open] { box-shadow: 0 0 0 100vmax rgba(0,0,0,.4); }
+.sheet::backdrop { background: transparent; }
 .sheet-title { font-size: 17px; margin: 14px 0 4px; }
 .scope { display: flex; gap: 16px; margin-top: 8px; font-size: 14px; }
 .scope[hidden] { display: none; }

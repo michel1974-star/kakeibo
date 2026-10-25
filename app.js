@@ -278,7 +278,19 @@ function openSubDialog(sub, ym) {
   document.querySelector('input[name="sub-scope"][value="month"]').checked = true;
   $('sub-delete').hidden = !sub;
   if (sub) $('sub-delete').textContent = `${ymLabel(ym)}から解約する`;
-  $('sub-dialog').showModal();
+  openSheet();
+}
+
+// 古いiPhone（iOS 15.3以前）など <dialog> 非対応のブラウザでも開けるようにする
+function openSheet() {
+  const d = $('sub-dialog');
+  if (typeof d.showModal === 'function') d.showModal();
+  else d.setAttribute('open', '');
+}
+function closeSheet() {
+  const d = $('sub-dialog');
+  if (typeof d.close === 'function') d.close();
+  else d.removeAttribute('open');
 }
 
 $('add-sub').addEventListener('click', () => {
@@ -294,7 +306,7 @@ $('sub-list').addEventListener('click', (e) => {
 });
 
 $('sub-amount').addEventListener('input', formatAmountInput);
-$('sub-cancel').addEventListener('click', () => $('sub-dialog').close());
+$('sub-cancel').addEventListener('click', closeSheet);
 
 $('sub-form').addEventListener('submit', (e) => {
   e.preventDefault();
@@ -322,7 +334,7 @@ $('sub-form').addEventListener('submit', (e) => {
     }
   }
   persistSubs();
-  $('sub-dialog').close();
+  closeSheet();
   renderSummary();
 });
 
@@ -337,7 +349,7 @@ $('sub-delete').addEventListener('click', () => {
   if (whole) subs = subs.filter((x) => x !== sub);
   else sub.end = prev;
   persistSubs();
-  $('sub-dialog').close();
+  closeSheet();
   renderSummary();
 });
 

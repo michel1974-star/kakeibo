@@ -1,6 +1,6 @@
 // オフライン対応用のサービスワーカー
 // アプリを更新したら CACHE の番号を上げる（v1 → v2）と、スマホ側にも新しい版が届きます
-const CACHE = 'kakeibo-v2';
+const CACHE = 'kakeibo-v3';
 const FILES = [
   './',
   'index.html',
@@ -25,10 +25,11 @@ self.addEventListener('activate', (e) => {
 });
 
 // ネットにつながっていれば最新版、つながっていなければ保存済みの版を使う
+// （no-cache：ブラウザのキャッシュに古い版が残っていても必ずサーバーに確認する）
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-cache' })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy));
