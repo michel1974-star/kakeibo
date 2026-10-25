@@ -1,6 +1,6 @@
 // オフライン対応用のサービスワーカー
 // アプリを更新したら CACHE の番号を上げる（v1 → v2）と、スマホ側にも新しい版が届きます
-const CACHE = 'kakeibo-v1';
+const CACHE = 'kakeibo-v2';
 const FILES = [
   './',
   'index.html',

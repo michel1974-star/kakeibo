@@ -79,6 +79,13 @@
 
       <h2 class="sub">この期間の記録</h2>
       <ul id="period-list" class="entry-list"></ul>
+
+      <div class="sub-head">
+        <h2 class="sub">サブスク・固定費 <span id="sub-sum"></span></h2>
+        <button type="button" id="add-sub" class="add-btn">＋ 追加</button>
+      </div>
+      <ul id="sub-list" class="entry-list sub-list"></ul>
+      <p class="note sub-note">登録した月から毎月自動で支出に入ります。タップで金額の変更・解約ができます。</p>
     </section>
 
     <!-- ===== 設定画面 ===== -->
@@ -113,6 +120,31 @@
       </div>
     </section>
   </main>
+
+  <!-- ===== サブスク追加・編集 ===== -->
+  <dialog id="sub-dialog" class="sheet">
+    <form id="sub-form" autocomplete="off">
+      <h2 id="sub-title" class="sheet-title"></h2>
+      <label class="field"><span>名前</span><input id="sub-name" type="text" placeholder="例：Netflix、電気代"></label>
+      <label class="field">
+        <span id="sub-amount-label">金額</span>
+        <input id="sub-amount" type="text" inputmode="numeric" placeholder="0">
+      </label>
+      <div id="sub-scope" class="scope">
+        <label><input type="radio" name="sub-scope" value="month" checked> この月だけ</label>
+        <label><input type="radio" name="sub-scope" value="forward"> この月以降ずっと</label>
+      </div>
+      <div class="row2">
+        <label class="field"><span>引き落とし日</span><select id="sub-day" class="select"></select></label>
+        <label class="field"><span>カテゴリ</span><select id="sub-cat" class="select"></select></label>
+      </div>
+      <div class="sheet-actions">
+        <button type="button" id="sub-cancel" class="ghost-btn">キャンセル</button>
+        <button type="submit" class="save-btn">保存</button>
+      </div>
+      <button type="button" id="sub-delete" class="danger-btn"></button>
+    </form>
+  </dialog>
 
   <nav class="tabbar">
     <button type="button" class="tab active" data-view="input"><span class="ic">＋</span>記入</button>
